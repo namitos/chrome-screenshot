@@ -17,8 +17,8 @@ async function makeScreenshot(data) {
   let { width, height } = data;
   let browser = await puppeteer.launch({
     headless: true,
-    executablePath: '/opt/google/chrome/chrome',
-    //executablePath: 'google-chrome-unstable',
+    //executablePath: '/opt/google/chrome/chrome',
+    executablePath: 'google-chrome-unstable',
     args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-infobars', `--window-size=${ width },${ height }`]
   });
   let page = await browser.newPage();
