@@ -12,11 +12,13 @@ app.use(bodyParser.json());
 async function makeScreenshot(data) {
   data.width = parseInt(data.width || 800);
   data.height = parseInt(data.height || 600);
+  data.type = data.type || 'buffer';
+
   let { width, height } = data;
   let browser = await puppeteer.launch({
     headless: true,
-    //executablePath: '/opt/google/chrome/chrome',
-    executablePath: 'google-chrome-unstable',
+    executablePath: '/opt/google/chrome/chrome',
+    //executablePath: 'google-chrome-unstable',
     args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-infobars', `--window-size=${ width },${ height }`]
   });
   let page = await browser.newPage();
@@ -27,14 +29,17 @@ async function makeScreenshot(data) {
   }
   let buffer = await page.screenshot();
   await browser.close();
-  return { result: buffer.toString('base64') };
+  return { buffer };
 }
 
 app.all('/', async (req, res) => {
   try {
     let q = req.method === 'GET' ? JSON.parse(req.query.q) : req.body;
-    let r = await makeScreenshot(q);
-    res.send(r);
+    let { buffer } = await makeScreenshot(q);
+    // res.set('Content-Type', 'image/png');
+    // res.write(buffer, 'binary');
+    // res.end();
+    res.send({ result: buffer.toString('base64') });
   } catch (err) {
     console.error(err);
     res.status(500).send(err);
