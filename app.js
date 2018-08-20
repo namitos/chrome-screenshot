@@ -10,8 +10,8 @@ app.use(bodyParser.json());
 
 
 async function makeScreenshot(data) {
-  data.width = data.width || 800;
-  data.height = data.height || 600;
+  data.width = parseInt(data.width || 800);
+  data.height = parseInt(data.height || 600);
   let { width, height } = data;
   let browser = await puppeteer.launch({
     headless: true,
