@@ -35,11 +35,7 @@ async function makeScreenshot(data) {
 app.all('/', async (req, res) => {
   try {
     let q = req.method === 'GET' ? JSON.parse(req.query.q) : req.body;
-    //console.log(`${req.method}`, q);
     let { buffer } = await makeScreenshot(q);
-    // res.set('Content-Type', 'image/png');
-    // res.write(buffer, 'binary');
-    // res.end();
     res.send({ result: buffer.toString('base64') });
   } catch (err) {
     console.error(err);
