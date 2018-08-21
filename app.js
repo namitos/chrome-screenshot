@@ -17,7 +17,6 @@ async function makeScreenshot(data) {
   data.width = parseInt(data.width || 800);
   data.height = parseInt(data.height || 600);
   data.type = data.type || 'buffer';
-  console.log(data.width, data.height);
 
   let { width, height } = data;
   let browser = await puppeteer.launch({
