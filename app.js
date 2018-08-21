@@ -8,6 +8,10 @@ let app = express();
 let server = http.createServer(app);
 app.use(bodyParser.json());
 
+const wait = (ms) => new Promise((resolve, reject) => {
+  setTimeout(resolve, ms);
+})
+
 
 async function makeScreenshot(data) {
   data.width = parseInt(data.width || 800);
@@ -28,6 +32,9 @@ async function makeScreenshot(data) {
     await page.goto(data.url, { waitUntil: 'networkidle2' });
   } else if (data.html) {
     await page.setContent(data.html);
+  }
+  if (data.wait) {
+    await wait(data.wait);
   }
   let buffer = await page.screenshot();
   await browser.close();
