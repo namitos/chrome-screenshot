@@ -13,6 +13,7 @@ async function makeScreenshot(data) {
   data.width = parseInt(data.width || 800);
   data.height = parseInt(data.height || 600);
   data.type = data.type || 'buffer';
+  console.log(data.width, data.height);
 
   let { width, height } = data;
   let browser = await puppeteer.launch({
@@ -22,6 +23,7 @@ async function makeScreenshot(data) {
     args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-infobars', `--window-size=${ width },${ height }`]
   });
   let page = await browser.newPage();
+  await page.setViewport({ width, height });
   if (data.url) {
     await page.goto(data.url, { waitUntil: 'networkidle2' });
   } else if (data.html) {
